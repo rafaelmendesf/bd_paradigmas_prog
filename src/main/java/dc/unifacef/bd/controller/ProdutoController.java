@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
+import java.net.URI;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
@@ -46,5 +47,23 @@ public class ProdutoController {
         URI uri = URI.create("/produtos/" + novo.getId());
         // Devolve código 201 - created
         return ResponseEntity.created(uri).body(novo);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> remover(@PathVariable Long id){
+        if(service.remover(id)){
+            return ResponseEntity.noContent().build(); // 204
+        }
+        return ResponseEntity.notFound().build(); // 404
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Produto> atualizar(@PathVariable Long id,
+                                             @RequestBody Produto atual){
+        Produto resposta = service.atualizar(id,atual);
+        if (resposta == null){
+            return ResponseEntity.notFound().build(); // 404
+        }
+        return ResponseEntity.ok(resposta); // 200
     }
 }

@@ -26,7 +26,24 @@ public class ProdutoService {
     }
     // inserir um produto
     public Produto salvar(Produto produto){
-        return repo.save(produto);
+        return repo.save(produto); // vai inserir pois produto não tem id
     }
-
+    // remove um produto por id
+    public boolean remover(Long id){
+        if(repo.existsById(id)){
+            // produto existe no banco
+            repo.deleteById(id);
+            return true;
+        }
+        return false; // não removeu pois produto não existe
+    }
+    // atualiza um produto
+    public Produto atualizar(long id, Produto atual){
+        if(repo.existsById(id)){
+            // associa id ao produto atualizado
+            atual.setId(id);
+            repo.save(atual); // vai atualizar pois atual tem id
+        }
+        return null;
+    }
 }
